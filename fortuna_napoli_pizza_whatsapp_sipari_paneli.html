@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Fortuna Napoli Pizza - Mobile App</title>
+    
+    <!-- Mobile App Web Capabilities -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0f0d0d">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        napoli: {
+                            bg: '#0F0D0D',
+                            card: '#181515',
+                            border: '#2A2424',
+                            red: '#DC2626',
+                            redDark: '#991B1B',
+                            gold: '#EAB308',
+                            goldMuted: '#CA8A04',
+                            cream: '#FAFAF9'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Mobile Ergonomic Styles -->
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0F0D0D;
+            color: #FAFAF9;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            overscroll-behavior-y: none;
+        }
+
+        .img-drop-shadow {
+            filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.75));
+        }
+
+        /* Hide scrollbars for clean app feel */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Bottom Sheet Slide Animations */
+        .bottom-sheet {
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+        }
+        .bottom-sheet-backdrop {
+            transition: opacity 0.3s ease;
+        }
+
+        /* Touch Active Feedback */
+        .touch-active:active {
+            transform: scale(0.96);
+            opacity: 0.9;
+        }
+
+        /* iOS Safe Area Insets for Edge-to-Edge display */
+        .pb-safe {
+            padding-bottom: env(safe-area-inset-bottom, 16px);
+        }
+        .pt-safe {
+            padding-top: env(safe-area-inset-top, 12px);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col bg-napoli-bg text-napoli-cream antialiased selection:bg-napoli-red selection:text-white">
+
+    <!-- Mobile App Sticky Header -->
+    <header class="sticky top-0 z-30 bg-napoli-bg/90 backdrop-blur-md border-b border-napoli-border pt-safe">
+        <div class="px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-napoli-red to-amber-600 flex items-center justify-center text-white text-xl shadow-lg shadow-red-950/50 border border-white/10">
+                    🍕
+                </div>
+                <div>
+                    <h1 class="font-serif font-bold text-lg text-white leading-tight flex items-center gap-1.5">
+                        Fortuna <span class="text-napoli-gold italic font-normal text-sm">Napoli</span>
+                    </h1>
+                    <p class="text-[10px] font-semibold text-emerald-400 tracking-wider uppercase flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Sipariş Hattı Açık
+                    </p>
+                </div>
+            </div>
+
+            <!-- Direct Call / WhatsApp Quick Link -->
+            <a href="https://wa.me/905353199817" target="_blank" class="w-10 h-10 rounded-2xl bg-emerald-950/80 border border-emerald-600/40 text-emerald-400 flex items-center justify-center text-lg shadow-md active:scale-95 transition">
+                <i class="fa-brands fa-whatsapp"></i>
+            </a>
+        </div>
+
+        <!-- Horizontal Scrollable Category Bar -->
+        <div class="flex items-center space-x-2 px-4 pb-2.5 pt-1 overflow-x-auto no-scrollbar">
+            <button onclick="scrollToSection('pizzas-sec')" class="bg-napoli-red text-white text-xs font-bold px-4 py-2 rounded-full whitespace-nowrap shadow-md shadow-red-950/40 flex items-center gap-1.5 active:scale-95 transition">
+                <span>🍕 Pizzalar</span>
+            </button>
+            <button onclick="scrollToSection('beverages-sec')" class="bg-napoli-card border border-napoli-border text-stone-300 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap active:scale-95 transition">
+                <span>🥤 İçecekler</span>
+            </button>
+            <button onclick="scrollToSection('info-sec')" class="bg-napoli-card border border-napoli-border text-stone-300 text-xs font-semibold px-4 py-2 rounded-full whitespace-nowrap active:scale-95 transition">
+                <span>ℹ️ Restoran Bilgisi</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 overflow-y-auto px-4 py-5 space-y-7 pb-36">
+
+        <!-- Banner Card -->
+        <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-red-950/80 via-napoli-card to-stone-900 border border-napoli-border p-4 shadow-xl">
+            <div class="relative z-10 space-y-1">
+                <span class="bg-napoli-gold/20 border border-napoli-gold/40 text-napoli-gold text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                    🔥 Hakiki Taş Fırın
+                </span>
+                <h2 class="font-serif text-xl font-bold text-white pt-1">Malzemeni Sen Seç!</h2>
+                <p class="text-xs text-stone-400 leading-relaxed max-w-[260px]">
+                    İstemediğin malzemeleri çıkar, sepetini hazırla. Tek tıkla WhatsApp'a düşsün.
+                </p>
+            </div>
+            <div class="absolute -right-4 -bottom-6 text-7xl opacity-20 pointer-events-none">
+                🍕
+            </div>
+        </div>
+
+        <!-- PIZZAS SECTION -->
+        <section id="pizzas-sec" class="space-y-4">
+            <div class="flex items-center justify-between">
+                <h2 class="font-serif text-xl font-bold text-white flex items-center gap-2">
+                    <span>🍕</span>
+                    <span>Napoliten Pizzalar</span>
+                </h2>
+                <span class="text-[11px] text-stone-400 font-medium">5 Çeşit</span>
+            </div>
+
+            <!-- Pizza Cards Stack -->
+            <div id="pizza-list" class="space-y-4">
+                <!-- Dynamic Pizza Cards -->
+            </div>
+        </section>
+
+        <!-- BEVERAGES SECTION -->
+        <section id="beverages-sec" class="space-y-4 pt-2">
+            <div class="flex items-center justify-between">
+                <h2 class="font-serif text-xl font-bold text-white flex items-center gap-2">
+                    <span>🥤</span>
+                    <span>Soğuk İçecekler</span>
+                </h2>
+                <span class="text-[11px] text-stone-400 font-medium">5 Çeşit</span>
+            </div>
+
+            <!-- Beverage Cards Grid -->
+            <div id="beverage-list" class="grid grid-cols-2 gap-3">
+                <!-- Dynamic Beverage Cards -->
+            </div>
+        </section>
+
+        <!-- INFO SECTION -->
+        <section id="info-sec" class="bg-napoli-card border border-napoli-border rounded-2xl p-4 space-y-3">
+            <h3 class="font-serif text-lg font-bold text-white flex items-center gap-2">
+                <span>📍</span> Fortuna Napoli Pizza
+            </h3>
+            <p class="text-xs text-stone-400 leading-relaxed">
+                Tüm pizzalarımız 48 saat fermante edilmiş hamur ile meşe odunu ateşinde 450°C taş fırında pişirilmektedir.
+            </p>
+            <div class="pt-2 border-t border-stone-800/80 flex items-center justify-between text-xs text-stone-300">
+                <span class="text-stone-400">WhatsApp Hat:</span>
+                <span class="font-bold text-emerald-400">+90 544 336 13 01</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Sticky App Action Bar (App Navigation + Cart Bar) -->
+    <div id="sticky-cart-bar" class="fixed bottom-0 left-0 right-0 z-40 bg-stone-950/95 backdrop-blur-xl border-t border-napoli-border pb-safe shadow-2xl transition-transform duration-300 translate-y-full">
+        <div class="p-3 px-4 flex items-center justify-between gap-3">
+            
+            <!-- Cart Trigger Button -->
+            <button onclick="openCartDrawer()" class="flex items-center space-x-3 bg-napoli-card border border-napoli-border hover:border-stone-700 px-3.5 py-2.5 rounded-2xl active:scale-95 transition">
+                <div class="relative">
+                    <span class="text-xl">🛒</span>
+                    <span id="cart-badge" class="absolute -top-2 -right-2 bg-napoli-red text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-stone-950">
+                        0
+                    </span>
+                </div>
+                <div class="text-left">
+                    <span class="text-[10px] text-stone-400 uppercase font-semibold block leading-tight">Toplam</span>
+                    <span id="cart-total-price" class="text-base font-bold text-napoli-gold leading-tight">0 TL</span>
+                </div>
+            </button>
+
+            <!-- Checkout Button -->
+            <button onclick="openCartDrawer()" class="flex-1 bg-gradient-to-r from-emerald-600 to-emerald-500 active:from-emerald-700 active:to-emerald-600 text-white min-h-[48px] px-4 rounded-2xl font-bold text-sm shadow-lg shadow-emerald-950/50 flex items-center justify-center space-x-2 active:scale-98 transition">
+                <span>Sepeti Onayla</span>
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- BOTTOM SHEET: Pizza Ingredient Customization Modal -->
+    <div id="custom-sheet-backdrop" onclick="closeCustomModal()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none bottom-sheet-backdrop"></div>
+    
+    <div id="custom-sheet" class="fixed bottom-0 left-0 right-0 z-50 bg-napoli-card border-t border-napoli-border rounded-t-3xl max-h-[85vh] flex flex-col bottom-sheet transform translate-y-full pb-safe shadow-2xl">
+        
+        <!-- Sheet Header Pull Bar -->
+        <div class="w-full flex justify-center pt-3 pb-1" onclick="closeCustomModal()">
+            <div class="w-12 h-1.5 bg-stone-700 rounded-full"></div>
+        </div>
+
+        <div class="px-5 pb-3 border-b border-napoli-border flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <img id="modal-img" src="" class="w-12 h-12 object-contain img-drop-shadow" alt="Pizza">
+                <div>
+                    <h3 id="modal-title" class="font-serif font-bold text-lg text-white">Pizza</h3>
+                    <p id="modal-price" class="text-xs font-bold text-napoli-gold">0 TL</p>
+                </div>
+            </div>
+            <button onclick="closeCustomModal()" class="w-9 h-9 rounded-full bg-stone-800 text-stone-400 flex items-center justify-center min-h-[36px] min-w-[36px] active:scale-95">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Ingredients Toggle Area -->
+        <div class="p-5 overflow-y-auto space-y-4 flex-1">
+            <div class="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2.5 text-xs text-amber-200/90">
+                <i class="fa-solid fa-circle-info text-amber-400 text-sm mt-0.5"></i>
+                <span>İstemediğiniz malzemenin switch'ini kapatarak pizzadan çıkarabilirsiniz.</span>
+            </div>
+
+            <h4 class="text-xs font-bold text-stone-400 uppercase tracking-wider">Pizzadaki Malzemeler</h4>
+
+            <div id="modal-ingredients" class="space-y-2.5">
+                <!-- Checkbox Switches inserted dynamically -->
+            </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="p-4 border-t border-napoli-border bg-stone-950/80">
+            <button onclick="confirmCustomPizzaAdd()" class="w-full bg-napoli-red active:bg-red-700 text-white min-h-[48px] rounded-2xl font-bold text-sm shadow-lg shadow-red-950/50 flex items-center justify-center space-x-2 transition">
+                <i class="fa-solid fa-cart-plus"></i>
+                <span>Özelleştirilmiş Pizzayı Sepete Ekle</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN MOBILE CART & CHECKOUT DRAWER -->
+    <div id="cart-drawer-backdrop" onclick="closeCartDrawer()" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    
+    <div id="cart-drawer" class="fixed inset-0 z-50 bg-napoli-bg flex flex-col transform translate-y-full transition-transform duration-300 pb-safe">
+        
+        <!-- Cart Header -->
+        <div class="px-4 py-3 bg-stone-950 border-b border-napoli-border flex items-center justify-between pt-safe">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl">🛍️</span>
+                <h3 class="font-serif font-bold text-lg text-white">Sipariş Sepetiniz</h3>
+            </div>
+            <button onclick="closeCartDrawer()" class="w-10 h-10 rounded-full bg-stone-800 text-stone-300 flex items-center justify-center text-lg active:scale-95">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Scrollable Cart Content & Form -->
+        <div class="flex-1 overflow-y-auto px-4 py-5 space-y-6">
+
+            <!-- Cart Items List -->
+            <div>
+                <div class="flex items-center justify-between mb-3">
+                    <h4 class="text-xs font-bold text-stone-400 uppercase tracking-wider">Seçilen Ürünler</h4>
+                    <button onclick="clearCart()" class="text-xs text-red-400 hover:underline">Sepeti Temizle</button>
+                </div>
+
+                <div id="cart-items-list" class="space-y-3">
+                    <!-- Dynamic Cart Items -->
+                </div>
+            </div>
+
+            <!-- Customer Checkout Form -->
+            <div class="bg-napoli-card border border-napoli-border rounded-2xl p-4 space-y-4">
+                <h4 class="text-xs font-bold text-napoli-gold uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <span>Teslimat & İletişim Bilgileri</span>
+                </h4>
+
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block text-stone-300 mb-1 font-medium">Ad Soyad *</label>
+                        <input type="text" id="cust-name" placeholder="Örn: Ahmet Yılmaz" class="w-full bg-stone-950 border border-napoli-border rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-napoli-red placeholder-stone-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-stone-300 mb-1 font-medium">Telefon Numarası *</label>
+                        <input type="tel" id="cust-phone" placeholder="Örn: 0544 336 13 01" class="w-full bg-stone-950 border border-napoli-border rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-napoli-red placeholder-stone-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-stone-300 mb-1 font-medium">Açık Adres *</label>
+                        <textarea id="cust-address" rows="2" placeholder="Mahalle, Sokak, Bina No, Daire..." class="w-full bg-stone-950 border border-napoli-border rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-napoli-red placeholder-stone-600"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-stone-300 mb-1 font-medium">Adres Tarifi / Sipariş Notu</label>
+                        <input type="text" id="cust-note" placeholder="Örn: Migros arkası sarı bina, zili çalmayın" class="w-full bg-stone-950 border border-napoli-border rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-napoli-red placeholder-stone-600">
+                    </div>
+
+                    <div>
+                        <label class="block text-stone-300 mb-1 font-medium">Ödeme Yöntemi *</label>
+                        <select id="cust-payment" class="w-full bg-stone-950 border border-napoli-border rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-napoli-red">
+                            <option value="Kapıda Kredi Kartı">Kapıda Kredi Kartı / POS</option>
+                            <option value="Nakit">Nakit Ödeme (Kapıda)</option>
+                            <option value="Online Transfer / IBAN">Online Transfer / IBAN</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Checkout Bottom Footer -->
+        <div class="p-4 bg-stone-950 border-t border-napoli-border space-y-3">
+            <div class="flex items-center justify-between">
+                <span class="text-xs text-stone-400 font-medium">Ödenecek Tutar:</span>
+                <span id="cart-drawer-total" class="font-serif font-bold text-2xl text-napoli-gold">0 TL</span>
+            </div>
+
+            <button onclick="sendOrderToWhatsApp()" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 active:from-emerald-700 active:to-emerald-600 text-white min-h-[52px] rounded-2xl font-bold text-sm shadow-xl shadow-emerald-950/60 flex items-center justify-center space-x-2 active:scale-98 transition">
+                <i class="fa-brands fa-whatsapp text-xl"></i>
+                <span>WhatsApp ile Siparişi Gönder</span>
+            </button>
+            <p class="text-[10px] text-center text-stone-500">
+                Siparişiniz doğrudan +90 544 336 13 01 hattımıza WhatsApp mesajı olarak iletilir.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Data Structures with loaded webp assets
+        const PRODUCTS = {
+            pizzas: [
+                {
+                    id: 'p1',
+                    name: 'Margarita',
+                    price: 240,
+                    description: 'Mozzarella, Domates Sosu, Fesleğen',
+                    ingredients: ['Mozzarella', 'Domates Sosu', 'Fesleğen'],
+                    image: 'Margarita.webp'
+                },
+                {
+                    id: 'p2',
+                    name: 'Pepperoni',
+                    price: 310,
+                    description: 'Mozzarella, Domates Sosu, Dana Sucuk',
+                    ingredients: ['Mozzarella', 'Domates Sosu', 'Dana Sucuk'],
+                    image: 'Pepperoni.webp'
+                },
+                {
+                    id: 'p3',
+                    name: 'Sosisli Mısırlı',
+                    price: 320,
+                    description: 'Mozzarella, Domates Sosu, Mısır, Füme Sosis, Kapya Biber',
+                    ingredients: ['Mozzarella', 'Domates Sosu', 'Mısır', 'Füme Sosis', 'Kapya Biber'],
+                    image: 'Sosisli Mısırlı.webp'
+                },
+                {
+                    id: 'p4',
+                    name: 'Ton Balıklı',
+                    price: 350,
+                    description: 'Mozzarella, Domates Sosu, Ton Balığı, Yeşil Zeytin, Siyah Zeytin, Soğan Parçaları, Kapya Biber',
+                    ingredients: ['Mozzarella', 'Domates Sosu', 'Ton Balığı', 'Yeşil Zeytin', 'Siyah Zeytin', 'Soğan Parçaları', 'Kapya Biber'],
+                    image: 'Ton Balıklı.webp'
+                },
+                {
+                    id: 'p5',
+                    name: 'Fortuna Karışık',
+                    price: 380,
+                    description: 'Mozzarella, Domates Sosu, Yeşil Zeytin, Siyah Zeytin, Kapya Biber, Yeşil Biber, Dana Sucuk',
+                    ingredients: ['Mozzarella', 'Domates Sosu', 'Yeşil Zeytin', 'Siyah Zeytin', 'Kapya Biber', 'Yeşil Biber', 'Dana Sucuk'],
+                    image: 'Fortuna Karışık.webp'
+                }
+            ],
+            beverages: [
+                { id: 'b1', name: '500 ml Ufak Su', price: 25, image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=400&q=80' },
+                { id: 'b2', name: 'Sarıyer 330 cl Kutu Kola İçecek', price: 60, image: 'Sarıyer 330 cl Kutu Kola İçecek.webp' },
+                { id: 'b3', name: 'Sarıyer 330 cl Kutu Portakallı İçecek', price: 60, image: 'Sarıyer 330 cl Kutu Portakallı İçecek.webp' },
+                { id: 'b4', name: 'Sarıyer 200 cl Kutu Kola İçecek', price: 45, image: 'Sarıyer 200 cl Kutu Kola İçecek.webp' },
+                { id: 'b5', name: 'Sarıyer 1 Litre Kola', price: 90, image: 'Sarıyer 1 Litre Kola.webp' }
+            ]
+        };
+
+        let cart = [];
+        let editingPizza = null;
+
+        // Initialize App on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPizzas();
+            renderBeverages();
+            updateCartUI();
+        });
+
+        // Smooth scroll helper
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        function renderPizzas() {
+            const container = document.getElementById('pizza-list');
+            container.innerHTML = PRODUCTS.pizzas.map(pizza => `
+                <div class="bg-napoli-card border border-napoli-border rounded-2xl p-4 flex flex-col justify-between shadow-lg relative overflow-hidden">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-24 h-24 bg-stone-950/80 rounded-xl p-1 border border-stone-800 flex items-center justify-center flex-shrink-0">
+                            <img src="${pizza.image}" alt="${pizza.name}" class="max-h-full max-w-full object-contain img-drop-shadow" onerror="this.src='https://placehold.co/200x200/181515/EAB308?text=${encodeURIComponent(pizza.name)}'">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-1">
+                                <h3 class="font-serif font-bold text-base text-white truncate">${pizza.name}</h3>
+                                <span class="font-bold text-napoli-gold text-sm whitespace-nowrap">${pizza.price} TL</span>
+                            </div>
+                            <p class="text-stone-400 text-xs leading-snug line-clamp-2 mt-1">${pizza.description}</p>
+                        </div>
+                    </div>
+
+                    <!-- Action buttons -->
+                    <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-stone-800/80">
+                        <button onclick="quickAddPizza('${pizza.id}')" class="min-h-[44px] bg-stone-800 active:bg-stone-700 text-stone-200 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 touch-active transition">
+                            <i class="fa-solid fa-plus text-[10px]"></i>
+                            <span>Direkt Ekle</span>
+                        </button>
+                        <button onclick="openCustomModal('${pizza.id}')" class="min-h-[44px] bg-napoli-red active:bg-red-700 text-white text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 shadow-md shadow-red-950/40 touch-active transition">
+                            <i class="fa-solid fa-sliders text-[10px]"></i>
+                            <span>Malzeme Çıkar</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderBeverages() {
+            const container = document.getElementById('beverage-list');
+            container.innerHTML = PRODUCTS.beverages.map(bev => `
+                <div class="bg-napoli-card border border-napoli-border rounded-xl p-3 flex flex-col justify-between shadow-md">
+                    <div class="w-full h-24 bg-stone-950/80 rounded-lg p-1.5 border border-stone-800 flex items-center justify-center mb-2">
+                        <img src="${bev.image}" alt="${bev.name}" class="max-h-full max-w-full object-contain img-drop-shadow" onerror="this.src='https://placehold.co/150x150/181515/EAB308?text=İçecek'">
+                    </div>
+                    <div class="mb-2">
+                        <h4 class="font-semibold text-xs text-white leading-tight line-clamp-2">${bev.name}</h4>
+                        <span class="text-xs font-bold text-napoli-gold block mt-0.5">${bev.price} TL</span>
+                    </div>
+                    <button onclick="addBeverage('${bev.id}')" class="w-full min-h-[40px] bg-stone-800 active:bg-napoli-red text-stone-300 active:text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1 transition touch-active">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Ekle</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function openCustomModal(pizzaId) {
+            const pizza = PRODUCTS.pizzas.find(p => p.id === pizzaId);
+            if (!pizza) return;
+
+            editingPizza = {
+                ...pizza,
+                selectedIngredients: [...pizza.ingredients]
+            };
+
+            document.getElementById('modal-title').innerText = pizza.name;
+            document.getElementById('modal-price').innerText = `${pizza.price} TL`;
+            
+            const imgEl = document.getElementById('modal-img');
+            imgEl.src = pizza.image;
+            imgEl.onerror = function() {
+                this.src = `https://placehold.co/100x100/181515/EAB308?text=${encodeURIComponent(pizza.name)}`;
+            };
+
+            const listContainer = document.getElementById('modal-ingredients');
+            listContainer.innerHTML = pizza.ingredients.map(ing => `
+                <label class="flex items-center justify-between bg-stone-950 border border-stone-800 px-4 py-3 rounded-xl cursor-pointer active:bg-stone-900 transition min-h-[48px]">
+                    <span class="text-xs font-semibold text-stone-200">${ing}</span>
+                    <input type="checkbox" checked onchange="toggleIngredient('${ing}', this.checked)" class="w-5 h-5 accent-napoli-red rounded cursor-pointer">
+                </label>
+            `).join('');
+
+            // Slide Up Bottom Sheet
+            document.getElementById('custom-sheet-backdrop').classList.remove('opacity-0', 'pointer-events-none');
+            const sheet = document.getElementById('custom-sheet');
+            sheet.classList.remove('translate-y-full');
+        }
+
+        function closeCustomModal() {
+            document.getElementById('custom-sheet-backdrop').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('custom-sheet').classList.add('translate-y-full');
+            editingPizza = null;
+        }
+
+        function toggleIngredient(ingredient, isChecked) {
+            if (!editingPizza) return;
+            if (isChecked) {
+                if (!editingPizza.selectedIngredients.includes(ingredient)) {
+                    editingPizza.selectedIngredients.push(ingredient);
+                }
+            } else {
+                editingPizza.selectedIngredients = editingPizza.selectedIngredients.filter(i => i !== ingredient);
+            }
+        }
+
+        function confirmCustomPizzaAdd() {
+            if (!editingPizza) return;
+
+            const removed = editingPizza.ingredients.filter(ing => !editingPizza.selectedIngredients.includes(ing));
+
+            pushToCart({
+                name: editingPizza.name,
+                price: editingPizza.price,
+                image: editingPizza.image,
+                removedIngredients: removed
+            });
+
+            closeCustomModal();
+        }
+
+        function quickAddPizza(pizzaId) {
+            const pizza = PRODUCTS.pizzas.find(p => p.id === pizzaId);
+            if (!pizza) return;
+            pushToCart({
+                name: pizza.name,
+                price: pizza.price,
+                image: pizza.image,
+                removedIngredients: []
+            });
+        }
+
+        function addBeverage(bevId) {
+            const bev = PRODUCTS.beverages.find(b => b.id === bevId);
+            if (!bev) return;
+            pushToCart({
+                name: bev.name,
+                price: bev.price,
+                image: bev.image,
+                removedIngredients: []
+            });
+        }
+
+        function pushToCart(item) {
+            const signature = item.name + '|' + (item.removedIngredients ? item.removedIngredients.sort().join(',') : '');
+            
+            const existing = cart.find(c => c.signature === signature);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({
+                    signature: signature,
+                    name: item.name,
+                    price: item.price,
+                    image: item.image,
+                    removedIngredients: item.removedIngredients || [],
+                    quantity: 1
+                });
+            }
+
+            updateCartUI();
+        }
+
+        function updateQuantity(index, delta) {
+            if (cart[index]) {
+                cart[index].quantity += delta;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function clearCart() {
+            cart = [];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+            const totalPrice = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+
+            document.getElementById('cart-badge').innerText = totalCount;
+            document.getElementById('cart-total-price').innerText = `${totalPrice} TL`;
+            document.getElementById('cart-drawer-total').innerText = `${totalPrice} TL`;
+
+            // Toggle Sticky Bar visibility
+            const stickyBar = document.getElementById('sticky-cart-bar');
+            if (totalCount > 0) {
+                stickyBar.classList.remove('translate-y-full');
+            } else {
+                stickyBar.classList.add('translate-y-full');
+                closeCartDrawer();
+            }
+
+            // Render Drawer List
+            const container = document.getElementById('cart-items-list');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-stone-500">
+                        <i class="fa-solid fa-basket-shopping text-3xl mb-2 opacity-30"></i>
+                        <p class="text-xs">Sepetiniz şu anda boş.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = cart.map((item, index) => `
+                    <div class="bg-napoli-card border border-napoli-border rounded-xl p-3 flex flex-col space-y-2">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center space-x-2.5 overflow-hidden">
+                                <img src="${item.image}" class="w-10 h-10 object-contain img-drop-shadow flex-shrink-0" alt="Item" onerror="this.src='https://placehold.co/80x80/181515/EAB308?text=Ürün'">
+                                <div class="truncate">
+                                    <h5 class="text-xs font-bold text-white truncate">${item.name}</h5>
+                                    <span class="text-xs text-napoli-gold font-bold">${item.price * item.quantity} TL</span>
+                                </div>
+                            </div>
+
+                            <!-- Quantity Controls -->
+                            <div class="flex items-center space-x-2 bg-stone-950 border border-stone-800 rounded-lg p-1 flex-shrink-0">
+                                <button onclick="updateQuantity(${index}, -1)" class="w-7 h-7 rounded bg-stone-800 text-stone-300 flex items-center justify-center text-xs active:scale-95">
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+                                <span class="text-xs font-bold text-white px-1.5">${item.quantity}</span>
+                                <button onclick="updateQuantity(${index}, 1)" class="w-7 h-7 rounded bg-stone-800 text-stone-300 flex items-center justify-center text-xs active:scale-95">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        ${item.removedIngredients.length > 0 ? `
+                            <div class="text-[11px] text-red-400 bg-red-950/50 border border-red-900/50 rounded-lg px-2 py-1 flex items-center gap-1">
+                                <span>❌ <b>Çıkarılan:</b> ${item.removedIngredients.join(', ')}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('');
+            }
+        }
+
+        function openCartDrawer() {
+            if (cart.length === 0) return;
+            document.getElementById('cart-drawer-backdrop').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.remove('translate-y-full');
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cart-drawer-backdrop').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('cart-drawer').classList.add('translate-y-full');
+        }
+
+        function sendOrderToWhatsApp() {
+            if (cart.length === 0) return;
+
+            const name = document.getElementById('cust-name').value.trim();
+            const phone = document.getElementById('cust-phone').value.trim();
+            const address = document.getElementById('cust-address').value.trim();
+            const note = document.getElementById('cust-note').value.trim();
+            const payment = document.getElementById('cust-payment').value;
+
+            if (!name || !phone || !address) {
+                alert('Lütfen Ad Soyad, Telefon ve Açık Adres alanlarını doldurun.');
+                return;
+            }
+
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+
+            // Clean, aligned WhatsApp Message Format
+            let msg = `🚨 *YENİ SİPARİŞ - Fortuna Napoli Pizza* 🚨\n`;
+            msg += `----------------------------------------\n`;
+            msg += `👤 *MÜŞTERİ BİLGİLERİ*\n`;
+            msg += `• *Ad Soyad:* ${name}\n`;
+            msg += `• *Telefon:* ${phone}\n`;
+            msg += `• *Ödeme:* ${payment}\n\n`;
+            msg += `📍 *TESLİMAT ADRESİ*\n`;
+            msg += `${address}\n`;
+            if (note) {
+                msg += `ℹ️ *Not / Tarif:* ${note}\n`;
+            }
+            msg += `----------------------------------------\n`;
+            msg += `🍕 *SEPET DETAYI*\n\n`;
+
+            cart.forEach((item, index) => {
+                msg += `${index + 1}️⃣ *${item.quantity}x ${item.name}* (${item.price * item.quantity} TL)\n`;
+                if (item.removedIngredients && item.removedIngredients.length > 0) {
+                    msg += `   └ ❌ *Çıkarılanlar:* ${item.removedIngredients.join(', ')}\n`;
+                }
+                msg += `\n`;
+            });
+
+            msg += `----------------------------------------\n`;
+            msg += `💵 *TOPLAM TUTAR:* ${totalPrice} TL\n`;
+            msg += `----------------------------------------`;
+
+            const targetPhone = "905353199817";
+            const encodedMsg = encodeURIComponent(msg);
+            const whatsappUrl = `https://wa.me/${targetPhone}?text=${encodedMsg}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+    </script>
+</body>
+</html>
